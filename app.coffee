@@ -1,7 +1,6 @@
 express = require('express')
 app = express()
 
-reload = require('reload')
 path = require('path')
 cookieParser = require('cookie-parser')
 bodyParser = require('body-parser')

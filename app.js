@@ -1,11 +1,9 @@
 (function() {
-  var app, assets, bodyParser, coffee, cookieParser, express, i18n, io, path, reload, routes, server, sockets, socketsManagement;
+  var app, assets, bodyParser, coffee, cookieParser, express, i18n, io, path, routes, server, sockets, socketsManagement;
 
   express = require('express');
 
   app = express();
-
-  reload = require('reload');
 
   path = require('path');
 
