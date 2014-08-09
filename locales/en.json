@@ -1,0 +1,60 @@
+{
+	"app": {
+		"name": "Othello"
+	},
+	"global": {
+		"close": "Fermer",
+		"cancel": "Annuler"
+	},
+	"form": {
+		"error": {
+			"allRequired": "Merci de remplir tous les champs.",
+			"uniqueGameName": "Ce nom de partie est déjà utilisé.",
+			"pseudoRequired": "Merci de saisir un pseudo.",
+			"uniquePseudo": "Ce pseudo est déjà utilisé sur cette partie."
+		}
+	},
+	"error": {
+		"gameNotFound": "Cette partie n'existe pas ou n'existe plus."
+	},
+	"startPage": {
+		"title": "Bienvenue sur le jeu Othello !",
+		"newGame": {
+			"title": "Créer une nouvelle partie",
+			"inputGameName": "Nom de la partie",
+			"inputPseudo": "Votre pseudo",
+			"inputSubmit": "Jouer !"
+		},
+		"joinGame": {
+			"title": "Rejoindre une partie existante",
+			"noGame": "Il n'y a pas encore de partie"
+		}
+	},
+	"modalJoinGame": {
+		"defaultTitle": "Rejoindre une partie",
+		"title": "Rejoindre la partie : %s",
+		"submit": "Jouer !",
+		"pseudo": "Votre pseudo"
+	},
+	"tchat": {
+		"fromGame": {
+			"waitingAnotherPlayer": "En attente d'un second joueur...",
+			"alertAnotherPlayer": " vient de rejoindre la partie !",
+			"alertYouJoin": "Vous venez de rejoindre la partie !",
+			"youStart": "C'est vous qui commencez.",
+			"theOtherStarts": {
+				"first": "C'est à ",
+				"second": " de commencer."
+			}
+		},
+		"insertMessageHere": "Tapez votre message ici..."
+	},
+	"data": {
+		"turn": "Tour : ",
+		"score": "Score"
+	},
+	"actions": {
+		"restart": "Recommencer la partie",
+		"quit": "Quitter la partie"
+	}
+}

@@ -1,0 +1,19 @@
+{
+	"app": {
+		"name": "Othello"
+	},
+	"startModal": {
+		"title": "Bienvenue sur le jeu Othello !",
+		"newGame": {
+			"title": "Créer une nouvelle partie"
+		},
+		"joinGame": {
+			"title": "Rejoindre une partie existante"
+		}
+	},
+	"form": {
+		"error": {
+			"allRequired": "form.error.allRequired"
+		}
+	}
+}

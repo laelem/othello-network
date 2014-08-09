@@ -1,0 +1,55 @@
+header
+  h1= __('app.name')
+  h2= params.gameName
+.row
+  section.col-sm-4#data
+    p
+      = __('data.turn')
+      span(class="#{ params.firstPlayer && params.firstToPlay == params.pseudoSecond ? 'pseudoToReplace' : '' }")
+        = params.firstToPlay
+    div
+      h4= __('data.score')
+      p(class="#{ params.firstToPlay == params.pseudoFirst ? 'black' : 'white' }")
+        span.pseudoFirst= params.pseudoFirst
+        = ' : '
+        span 2
+      p(class="#{ params.firstToPlay == params.pseudoFirst ? 'white' : 'black' }")
+        span.pseudoSecond(class="#{ params.firstPlayer ? 'pseudoToReplace' : '' }")
+          = params.pseudoSecond
+        = ' : '
+        span 2
+    .actions
+      a.restart.btn.btn-primary= __('actions.restart')
+      a.quit.btn.btn-primary= __('actions.quit')
+
+  section.col-sm-4#gameboard(role='gameboard')
+    - for (i=0 ; i < params.gameboard_size ; ++i)
+      div(role='row')
+        - for (j=0 ; j < params.gameboard_size ; ++j)
+          div(role='case')
+            - if ((i == params.middle1 && j == params.middle1) || (i == params.middle2 && j == params.middle2))
+              span(role='piece', data-color='white')
+            - else if ((i == params.middle1 && j == params.middle2) || (i == params.middle2 && j == params.middle1))
+              span(role='piece', data-color='black')
+
+  section.col-sm-4#tchat
+    ul
+      - if (params.firstPlayer)
+        li.fromGame.waitingAnotherPlayer= __('tchat.fromGame.waitingAnotherPlayer')
+        li.fromGame.alertAnotherPlayer.hidden
+          span.pseudoToReplace= params.pseudoSecond
+          = __('tchat.fromGame.alertAnotherPlayer')
+      - else
+        li.fromGame.alertYouJoin= __('tchat.fromGame.alertYouJoin')
+
+      - if (params.youStart)
+        li(class="#{ params.firstPlayer ? 'hidden' : '' }").fromGame.youStart
+          = __('tchat.fromGame.youStart')
+      - else
+        li(class="#{ params.firstPlayer ? 'hidden' : '' }").fromGame.theOtherStarts
+          = __('tchat.fromGame.theOtherStarts.first')
+          span(class="#{ params.firstPlayer ? 'pseudoToReplace' : '' }")
+            = params.firstToPlay == params.pseudoFirst ? params.pseudoFirst : params.pseudoSecond
+          = __('tchat.fromGame.theOtherStarts.second')
+
+    textarea(placeholder="#{__('tchat.insertMessageHere')}")
