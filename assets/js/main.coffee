@@ -9,7 +9,7 @@ getGameBoard = (params) ->
     $('#main').html(data.html);
 
 (($) ->
-  socket = io.connect('http://localhost:8888')
+  socket = io.connect(window.location.href)
 
   socket.on 'getGameList', (gameList) ->
     $('#joinGame .loading').remove()
