@@ -1,7 +1,12 @@
 getGameElemList = (gameName) ->
-  data = '<li><a class="bg-info" href="#" data-gameName="' + encodeURIComponent(gameName)
-  data+= '">' + gameName + '</a></li>'
-  return data
+  elem = $('<li>')
+  elem.append $('<a>', {
+    class: 'bg-info'
+    href: '#'
+    text: gameName
+    'data-gameName': encodeURIComponent(gameName)
+  })
+  return elem
 
 getGameBoard = (params) ->
   $.post '/play', {params: params}, (data) ->
@@ -15,8 +20,10 @@ tryToJoinGame = (socket) ->
   socket.emit 'submitJoinGame', gameName, pseudo
 
 addTchatMessage = (pseudo, message) ->
-  elem = '<li><span class="pseudo">' + pseudo + ':</span> ' + message + '</li>'
-  $('#tchat .writing').before(elem)
+  elem = $('<li>', {class: 'message'})
+  elem.append $('<span>', {text: pseudo + ': ', class: 'pseudo'})
+  elem.append $('<span>', {text: message, class: 'textMessage'})
+  $('#tchat .writing').before elem
 
 
 (($) ->
@@ -103,6 +110,9 @@ addTchatMessage = (pseudo, message) ->
     window.pseudoOtherPlayer = pseudo
     $('.pseudoToReplace').text pseudo
     $('#tchat .showOnLoad').removeClass 'hidden'
+    $('#tchat textarea')
+      .removeAttr('disabled')
+      .attr('placeholder', $('#tchat textarea').attr('data-placeholder'))
 
   socket.on 'otherPlayerQuit', ->
     window.pseudoOtherPlayer = ''

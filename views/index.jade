@@ -81,4 +81,7 @@ header
         span.pseudo
         = __('tchat.someoneIsWriting')
 
-    textarea(placeholder="#{__('tchat.insertMessageHere')}")
+    - if (params.firstPlayer)
+      textarea(data-placeholder="#{__('tchat.insertMessageHere')}", disabled="disabled")
+    - else
+      textarea(placeholder="#{__('tchat.insertMessageHere')}")
