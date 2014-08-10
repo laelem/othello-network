@@ -47,7 +47,8 @@
 				"second": " de commencer."
 			}
 		},
-		"insertMessageHere": "Tapez votre message ici..."
+		"insertMessageHere": "Tapez votre message ici...",
+		"someoneIsWriting": " est en train d'écrire un message..."
 	},
 	"data": {
 		"turn": "Tour : ",

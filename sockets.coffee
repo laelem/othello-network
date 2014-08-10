@@ -59,3 +59,13 @@ module.exports.start = (io, i18n) ->
           socket.broadcast.emit 'removeGame', gameName
           if stillOnePlayer
             socket.broadcast.to(encodeURIComponent(gameName)).emit 'otherPlayerQuit'
+
+    # Tchat
+    socket.on 'tchatMessage', (gameName, pseudo, message) ->
+      socket.broadcast.to(encodeURIComponent(gameName)).emit 'receiveTchatMessage', pseudo, message
+
+    socket.on 'tchatWriting', (gameName, pseudo) ->
+      socket.broadcast.to(encodeURIComponent(gameName)).emit 'tchatWriting', pseudo
+
+    socket.on 'tchatNotWriting', (gameName, pseudo) ->
+      socket.broadcast.to(encodeURIComponent(gameName)).emit 'tchatNotWriting', pseudo

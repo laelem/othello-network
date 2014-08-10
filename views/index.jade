@@ -61,20 +61,24 @@ header
     ul
       - if (params.firstPlayer)
         li.fromGame.waitingAnotherPlayer= __('tchat.fromGame.waitingAnotherPlayer')
-        li.fromGame.alertAnotherPlayer.hidden
+        li.fromGame.alertAnotherPlayer.hidden.showOnLoad
           span.pseudoToReplace= params.pseudoSecond
           = __('tchat.fromGame.alertAnotherPlayer')
       - else
         li.fromGame.alertYouJoin= __('tchat.fromGame.alertYouJoin')
 
       - if (params.youStart)
-        li(class="#{ params.firstPlayer ? 'hidden' : '' }").fromGame.youStart
+        li(class="#{ params.firstPlayer ? 'hidden showOnLoad' : '' }").fromGame.youStart
           = __('tchat.fromGame.youStart')
       - else
-        li(class="#{ params.firstPlayer ? 'hidden' : '' }").fromGame.theOtherStarts
+        li(class="#{ params.firstPlayer ? 'hidden showOnLoad' : '' }").fromGame.theOtherStarts
           = __('tchat.fromGame.theOtherStarts.first')
           span(class="#{ params.firstPlayer ? 'pseudoToReplace' : '' }")
             = params.firstToPlay == params.pseudoFirst ? params.pseudoFirst : params.pseudoSecond
           = __('tchat.fromGame.theOtherStarts.second')
+
+      li.writing.hidden
+        span.pseudo
+        = __('tchat.someoneIsWriting')
 
     textarea(placeholder="#{__('tchat.insertMessageHere')}")
