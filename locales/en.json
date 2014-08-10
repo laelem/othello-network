@@ -56,5 +56,11 @@
 	"actions": {
 		"restart": "Recommencer la partie",
 		"quit": "Quitter la partie"
+	},
+	"modalOtherPlayerQuit": {
+		"title": " est parti !",
+		"message": " a quitté la partie ou a été déconnecté.",
+		"gameOver": "La partie est terminée.",
+		"backToHome": "Retour à l'accueil"
 	}
 }

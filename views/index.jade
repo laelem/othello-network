@@ -1,3 +1,28 @@
+#modalOtherPlayerQuit.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type="button", data-dismiss="modal")
+          span(aria-hidden="true") &times;
+          span.sr-only= __('global.close')
+        h4.modal-title
+          - if (params.firstPlayer)
+            span.pseudoToReplace= params.pseudoSecond
+          - else
+            span= params.pseudoFirst
+          = __('modalOtherPlayerQuit.title')
+      .modal-body
+        p
+          - if (params.firstPlayer)
+            span.pseudoToReplace= params.pseudoSecond
+          - else
+            span= params.pseudoFirst
+          = __('modalOtherPlayerQuit.message')
+        p= __('modalOtherPlayerQuit.gameOver')
+      .modal-footer
+        button.btn.btn-primary.linkBackToHome(type="button")
+          = __('modalOtherPlayerQuit.backToHome')
+
 header
   h1= __('app.name')
   h2= params.gameName

@@ -14,7 +14,6 @@ getGameBoard = (params) ->
   socket.on 'getGameList', (gameList) ->
     $('#joinGame .loading').remove()
     if gameList.length > 0
-      $('#joinGame').append('<ul class="list-unstyled"></ul>')
       $.each gameList, (i, gameName) ->
         $('#joinGame ul').append getGameElemList(gameName)
     else
@@ -39,9 +38,8 @@ getGameBoard = (params) ->
     getGameBoard params
     
   socket.on 'newGame', (gameName) ->
-    if $('#joinGame ul').length == 0
+    if $('#joinGame li').length == 0
       $('#joinGame .noGame').addClass('hidden')
-      $('#joinGame').append('<ul class="list-unstyled"></ul>')
     $('#joinGame ul').append getGameElemList(gameName) 
 
   $('#joinGame').on 'click', 'a', (event) ->
@@ -70,14 +68,19 @@ getGameBoard = (params) ->
       firstToPlay: firstToPlay
     getGameBoard params
 
-  socket.on 'maxPlayers', (gameName) ->
+  socket.on 'removeGame', (gameName) ->
     $('#joinGame a[data-gameName="' + encodeURIComponent(gameName) + '"]').parent('li').remove()
     if $('#joinGame li').length == 0
-      $('#joinGame ul').remove
       $('#joinGame .noGame').removeClass('hidden')
 
   socket.on 'secondPlayerArrived', (pseudo) ->
     $('.pseudoToReplace').text pseudo
     $('#tchat .hidden').removeClass 'hidden'
+
+  socket.on 'otherPlayerQuit', ->
+    $('#modalOtherPlayerQuit').modal()
+
+  $('body').on 'click', '#modalOtherPlayerQuit .linkBackToHome', ->
+    window.location.href = '/'
 
 ) jQuery

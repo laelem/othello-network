@@ -1,11 +1,17 @@
 ent = require("ent")
 
-module.exports.start = (io, i18n) ->
+data = 
+  'gameList': [] 
+  'gameListPlayers': []
+  'firstToPlayList': []
 
-  data = 
-    'gameList': [] 
-    'gameListPlayers': []
-    'firstToPlayList': []
+# Determine which player starts
+defineWhoStarts = (pseudo) ->
+  if Math.round(Math.random() * 2) == 0
+    return pseudo
+  return '???'
+
+module.exports.start = (io, i18n) ->
   
   io.sockets.on 'connection', (socket) ->
     socket.emit 'getGameList', data.gameList
@@ -20,14 +26,7 @@ module.exports.start = (io, i18n) ->
       else
         length = data.gameList.push gameName
         data.gameListPlayers[length - 1] = [pseudo]
-
-        # Determine which player starts
-        if Math.round(Math.random() * 2) == 0
-          firstToPlay = pseudo
-        else
-          firstToPlay = '???'
-        data.firstToPlayList[length - 1] = firstToPlay
-
+        data.firstToPlayList[length - 1] = firstToPlay = defineWhoStarts(pseudo)
         socket.join encodeURIComponent(gameName)
         socket.emit 'successSubmitNewGame', gameName, pseudo, firstToPlay
         socket.broadcast.emit 'newGame', gameName
@@ -39,19 +38,24 @@ module.exports.start = (io, i18n) ->
         socket.emit 'errorSubmitJoinGame', i18n.__('form.error.pseudoRequired')
       else if gameListPlayers.indexOf(pseudo) != -1
         socket.emit 'errorSubmitJoinGame', i18n.__('form.error.uniquePseudo')
-      else
+      else if gameListPlayers.length == 1
+        data.gameListPlayers[data.gameList.indexOf gameName].push pseudo
         pseudoFirstPlayer = data.gameListPlayers[data.gameList.indexOf gameName][0]
         firstToPlay = data.firstToPlayList[data.gameList.indexOf gameName]
         if firstToPlay == '???' then firstToPlay = pseudo
         socket.join encodeURIComponent(gameName)
         socket.emit 'successSubmitJoinGame', gameName, pseudo, firstToPlay, pseudoFirstPlayer
         socket.broadcast.to(encodeURIComponent(gameName)).emit 'secondPlayerArrived', pseudo
+        socket.broadcast.emit 'removeGame', gameName
 
-        # Remove the game from lists
-        data.firstToPlayList.splice(data.gameList.indexOf(gameName), 1)
-        data.gameListPlayers.splice(data.gameList.indexOf(gameName), 1)
-        data.gameList.splice(data.gameList.indexOf(gameName), 1)
-        io.sockets.emit 'maxPlayers', gameName
-
-    # socket.on 'getFirstToPlay', (gameName, pseudo) ->
-    #   socket.emit 'firstToPlay'
+    socket.on 'disconnect', ->
+      rooms = socket.rooms.slice(1)
+      for gameName in rooms
+        if data.gameListPlayers[data.gameList.indexOf gameName]
+          stillOnePlayer = data.gameListPlayers[data.gameList.indexOf gameName].length == 2
+          data.firstToPlayList.splice(data.gameList.indexOf(gameName), 1)
+          data.gameListPlayers.splice(data.gameList.indexOf(gameName), 1)
+          data.gameList.splice(data.gameList.indexOf(gameName), 1)
+          socket.broadcast.emit 'removeGame', gameName
+          if stillOnePlayer
+            socket.broadcast.to(encodeURIComponent(gameName)).emit 'otherPlayerQuit'
