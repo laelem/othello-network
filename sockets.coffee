@@ -1,5 +1,3 @@
-ent = require("ent")
-
 data = 
   'gameList': [] 
   'gameListPlayers': []
@@ -17,8 +15,8 @@ module.exports.start = (io, i18n) ->
     socket.emit 'getGameList', data.gameList
 
     socket.on 'submitNewGame', (gameName, pseudo) ->
-      gameName = ent.decode gameName.trim()
-      pseudo = ent.decode pseudo.trim()
+      gameName = gameName.trim()
+      pseudo = pseudo.trim()
       if gameName == '' || pseudo == ''
         socket.emit 'errorSubmitNewGame', i18n.__('form.error.allRequired')
       else if data.gameList.indexOf(gameName) != -1
@@ -27,13 +25,13 @@ module.exports.start = (io, i18n) ->
         length = data.gameList.push gameName
         data.gameListPlayers[length - 1] = [pseudo]
         data.firstToPlayList[length - 1] = firstToPlay = defineWhoStarts(pseudo)
-        socket.join encodeURIComponent(gameName)
+        socket.join gameName
         socket.emit 'successSubmitNewGame', gameName, pseudo, firstToPlay
         socket.broadcast.emit 'newGame', gameName
 
     socket.on 'submitJoinGame', (gameName, pseudo) ->
       gameListPlayers = data.gameListPlayers[data.gameList.indexOf gameName]
-      pseudo = ent.decode pseudo.trim()
+      pseudo = pseudo.trim()
       if pseudo == ''
         socket.emit 'errorSubmitJoinGame', i18n.__('form.error.pseudoRequired')
       else if gameListPlayers.indexOf(pseudo) != -1
@@ -43,9 +41,9 @@ module.exports.start = (io, i18n) ->
         pseudoFirstPlayer = data.gameListPlayers[data.gameList.indexOf gameName][0]
         firstToPlay = data.firstToPlayList[data.gameList.indexOf gameName]
         if firstToPlay == '???' then firstToPlay = pseudo
-        socket.join encodeURIComponent(gameName)
+        socket.join gameName
         socket.emit 'successSubmitJoinGame', gameName, pseudo, firstToPlay, pseudoFirstPlayer
-        socket.broadcast.to(encodeURIComponent(gameName)).emit 'secondPlayerArrived', pseudo
+        socket.broadcast.to(gameName).emit 'secondPlayerArrived', pseudo
         socket.broadcast.emit 'removeGame', gameName
 
     socket.on 'disconnect', ->
@@ -58,14 +56,14 @@ module.exports.start = (io, i18n) ->
           data.gameList.splice(data.gameList.indexOf(gameName), 1)
           socket.broadcast.emit 'removeGame', gameName
           if stillOnePlayer
-            socket.broadcast.to(encodeURIComponent(gameName)).emit 'otherPlayerQuit'
+            socket.broadcast.to(gameName).emit 'otherPlayerQuit'
 
     # Tchat
     socket.on 'tchatMessage', (gameName, pseudo, message) ->
-      socket.broadcast.to(encodeURIComponent(gameName)).emit 'receiveTchatMessage', pseudo, message
+      socket.broadcast.to(gameName).emit 'receiveTchatMessage', pseudo, message
 
     socket.on 'tchatWriting', (gameName, pseudo) ->
-      socket.broadcast.to(encodeURIComponent(gameName)).emit 'tchatWriting', pseudo
+      socket.broadcast.to(gameName).emit 'tchatWriting', pseudo
 
     socket.on 'tchatNotWriting', (gameName, pseudo) ->
-      socket.broadcast.to(encodeURIComponent(gameName)).emit 'tchatNotWriting', pseudo
+      socket.broadcast.to(gameName).emit 'tchatNotWriting', pseudo

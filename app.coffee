@@ -75,5 +75,3 @@ server = app.listen app.get('port'), ->
 # Sockets
 io = sockets.listen server
 socketsManagement.start io, i18n
-
-# reload server, app

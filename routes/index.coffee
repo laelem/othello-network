@@ -1,6 +1,5 @@
 express = require('express')
 router = express.Router()
-ent = require("ent")
 i18n = require("i18n")
 config = require('../config')
 

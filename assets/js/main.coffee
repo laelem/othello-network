@@ -4,7 +4,7 @@ getGameElemList = (gameName) ->
     class: 'bg-info'
     href: '#'
     text: gameName
-    'data-gameName': encodeURIComponent(gameName)
+    'data-gameName': gameName
   })
   return elem
 
@@ -15,7 +15,7 @@ getGameBoard = (params) ->
     $('#tchat textarea').focus()
 
 tryToJoinGame = (socket) ->
-  gameName = decodeURIComponent $('#modalJoinGame .submit').attr('data-gameName')
+  gameName = $('#modalJoinGame .submit').attr('data-gameName')
   pseudo = $('#modalJoinGame input[name="pseudo"]').val()
   socket.emit 'submitJoinGame', gameName, pseudo
 
@@ -67,7 +67,7 @@ addTchatMessage = (pseudo, message) ->
 
   $('#joinGame').on 'click', 'a', (event) ->
     event.preventDefault()
-    gameName = decodeURIComponent $(this).attr('data-gameName')
+    gameName = $(this).attr('data-gameName')
     title = $('#modalJoinGame .modal-title').attr 'data-title' 
     $('#modalJoinGame .modal-title').text title.replace('%s', gameName)
     $('#modalJoinGame .submit').attr 'data-gameName', gameName
@@ -102,7 +102,7 @@ addTchatMessage = (pseudo, message) ->
     getGameBoard params
 
   socket.on 'removeGame', (gameName) ->
-    $('#joinGame a[data-gameName="' + encodeURIComponent(gameName) + '"]').parent('li').remove()
+    $('#joinGame a[data-gameName="' + gameName + '"]').parent('li').remove()
     if $('#joinGame li').length == 0
       $('#joinGame .noGame').removeClass('hidden')
 
