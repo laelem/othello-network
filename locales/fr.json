@@ -48,8 +48,8 @@
 		"showRules": "Lire les règles"
 	},
 	"modalOtherPlayerQuit": {
-		"title": " est parti !",
-		"message": " a quitté la partie ou a été déconnecté.",
+		"title": " est parti(e) !",
+		"message": " a quitté la partie ou a été déconnecté(e).",
 		"gameOver": "La partie est terminée.",
 		"backToHome": "Retour à l'accueil"
 	},
@@ -68,11 +68,16 @@
 			"first": "C'est ",
 			"second": " qui commence."
 		},
-		"impossiblePlay": "Vous ne pouvez jouer aucun coup ! C'est encore à %s de jouer.",
-		"impossiblePlayOtherPlayer": "%s ne peut jouer aucun coup ! C'est encore à vous de jouer.",
+		"impossiblePlay": {
+			"first": "Vous ne pouvez jouer aucun coup ! C'est encore à ",
+			"second": " de jouer."
+		},
+		"impossiblePlayOtherPlayer": " ne peut jouer aucun coup ! C'est encore à vous de jouer.",
 		"endGameEqual": "Égalité !",
 		"endGame": "%s a gagné !",
-		"theOtherRestarted": "%s a recommencé la partie !"
+		"theOtherRestarted": "%s a recommencé la partie !",
+		"yourTurn": "C'est votre tour !",
+		"theOtherTurn": " réfléchit..."
 	},
 	"modalRestart": {
 		"title": "Recommencer la partie",

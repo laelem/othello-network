@@ -37,9 +37,6 @@
   cursor pointer
   .row
     line-height 10px
-    &:first-child
-      [role="case"]
-        border-top 1px solid white
   .case
     display inline-block
     width 39px
@@ -49,6 +46,8 @@
     border-right 1px solid white
     &:first-child
       border-left 1px solid white
+    &.lastPlayed
+      background-color darken(red, 10)
   .piece
     display inline-block
     width 29px
@@ -72,6 +71,8 @@
     height 243px
     overflow-y auto
     padding 10px
+  li
+    list-style none
   textarea
     width 100%
     padding 10px
@@ -118,13 +119,14 @@
   position relative
   #alertMessage
     margin-top 20px
-    min-height 50px
-    background-color darken(white, 10)
+    background-color lighten(brand-success, 30)
     p
       margin 0
       padding 15px
+      font-size: 20px
+    .theOtherTurn .pseudo
+      padding-left 8px
     .endGameEqual, .endGame
-      font-weight bold
       text-transform uppercase
   #actions
     position absolute

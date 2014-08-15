@@ -73,8 +73,10 @@ define ['socket.io', 'jquery', 'cs!app/game'], (io, $, Game) ->
     socket.on 'otherPlayerArrived', (pseudo) ->
       window.game.setPseudoOther pseudo
       $('.pseudoToReplace').text pseudo
-      $('.waitingAnotherPlayer').addClass 'hidden'
-      $('.alertAnotherPlayer').removeClass 'hidden'
+      $('#alertMessage').html(
+        $('#alertMessageList .alertAnotherPlayer').clone()
+          .addClass('animated bounceIn')
+      )
       $('#tchat textarea')
         .removeAttr('disabled')
         .attr('placeholder', $('#tchat textarea').attr('data-placeholder'))
@@ -92,14 +94,18 @@ define ['socket.io', 'jquery', 'cs!app/game'], (io, $, Game) ->
 
     $('body').on 'click', '#gameboard .case', (event) ->
       action = window.game.playShot $(this)
-      if action then socket.emit 'endTurn', window.game.gameName, window.game.game
+      if action 
+        socket.emit 'endTurn', window.game.gameName, window.game.game, window.game.lastPiecePlayed
       switch action
-        when 'otherCanPlay' then socket.emit 'otherCanPlay', window.game.gameName
-        when 'impossiblePlayOther' then socket.emit 'impossiblePlayOther', window.game.gameName
-        when 'endGame' then socket.emit 'endGame', window.game.gameName
+        when 'otherCanPlay' 
+          socket.emit 'otherCanPlay', window.game.gameName
+        when 'impossiblePlayOther' 
+          socket.emit 'impossiblePlayOther', window.game.gameName
+        when 'endGame' 
+          socket.emit 'endGame', window.game.gameName
 
-    socket.on 'endTurnOther', (game) ->
-      window.game.endTurnOther game
+    socket.on 'endTurnOther', (game, lastPiecePlayed) ->
+      window.game.endTurnOther game, lastPiecePlayed
 
     socket.on 'myTurn', ->
       window.game.myTurn()

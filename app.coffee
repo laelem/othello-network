@@ -38,6 +38,7 @@ app.use stylus.middleware(
   dest: path.join(__dirname, 'public')
   compile: (str, pathname) ->
     stylus(str)
+      .set('include css', true)
       .set('filename', pathname)
       .set('compress', true)
       .use(nib())

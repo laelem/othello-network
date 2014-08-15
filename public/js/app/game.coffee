@@ -24,6 +24,7 @@ define ['jquery'], ($) ->
 
     initGame: ->
       @turn = 'black'
+      @lastPiecePlayed = {}
       @color = if @firstToPlay == @pseudo then 'black' else 'white'
       @whiteScore = @blackScore = 0
       @game = ('' for _ in [0...@gameboardSize] for _ in [0...@gameboardSize])
@@ -59,11 +60,21 @@ define ['jquery'], ($) ->
         row = elem.parent().index()
         pieces = @shot(row, frame, @color, false)
         if pieces.length > 0
-          $('#alertMessage p').addClass 'hidden'
           @game[row][frame] = @color
+          @lastPiecePlayed.row = row
+          @lastPiecePlayed.frame = frame
+          $('#gameboard .case').removeClass 'lastPlayed'
+          elem.addClass 'lastPlayed'
           for piece in pieces
             @game[piece.row][piece.frame] = @color
           @endTurn()
+
+    showLastPiecePlayed: ->
+      row = (parseInt(@lastPiecePlayed.row, 10) + 1).toString()
+      frame = (parseInt(@lastPiecePlayed.frame, 10) + 1).toString()
+      elem = $('#gameboard .row:nth-child('+row+') .case:nth-child('+frame+')')
+      $('#gameboard .case').removeClass 'lastPlayed'
+      elem.addClass 'lastPlayed'
 
     shot: (row, frame, color, possibility) ->
       pieces = []
@@ -99,56 +110,68 @@ define ['jquery'], ($) ->
         @turn = @oppositeTurn(@turn)
         $('#data .turn').removeClass(@oppositeTurn(@turn)).addClass(@turn)
         $('#data .turn .pseudo').text @pseudoOther
+        $('#alertMessage').html(
+          $('#alertMessageList .theOtherTurn').clone()
+            .addClass('animated bounceIn')
+        )
         return 'otherCanPlay'
       else if @hasPossibleShot(@turn)
-        message = $('#alertMessage .impossiblePlayOther').text()
-        $('#alertMessage .impossiblePlayOther')
-          .text message.replace('%s', @pseudoOther)
-          .removeClass 'hidden'
+        $('#alertMessage').html(
+          $('#alertMessageList .impossiblePlayOther').clone()
+            .addClass('animated bounceIn')
+        )
         return 'impossiblePlayOther'
       else
         @endGame()
         return 'endGame'
 
-    endTurnOther: (game) ->
+    endTurnOther: (game, lastPiecePlayed) ->
+      @lastPiecePlayed = lastPiecePlayed
+      @showLastPiecePlayed()
       @game = game
-      @updateGameBoard(@game)
-      $('#alertMessage p').addClass 'hidden'
+      @updateGameBoard()
       
     myTurn: ->
       @turn = @oppositeTurn(@turn)
       $('#data .turn').removeClass(@oppositeTurn(@turn)).addClass(@turn)
       $('#data .turn .pseudo').text @pseudo
+      $('#alertMessage').html(
+        $('#alertMessageList .yourTurn').clone()
+          .addClass('animated bounceIn')
+      )
 
     impossiblePlay: ->
-      message = $('#alertMessage .impossiblePlay').text()
-      $('#alertMessage .impossiblePlay')
-        .text message.replace('%s', @pseudoOther)
-        .removeClass 'hidden'
+      $('#alertMessage').html(
+        $('#alertMessageList .impossiblePlay').clone()
+          .addClass('animated bounceIn')
+      )
 
     endGame: ->
       if @whiteScore == @blackScore
-        $('#alertMessage .endGameEqual').removeClass 'hidden'
+        $('#alertMessage').html(
+          $('#alertMessageList .endGameEqual').clone()
+            .addClass('animated bounceIn')
+        )
       else
         winnerColor = if @whiteScore > @blackScore then 'white' else 'black' 
         winner = if @color == winnerColor then @pseudo else @pseudoOther
-        messageEndGame = $('#alertMessage .endGame').text()
-        $('#alertMessage .endGame')
-          .text messageEndGame.replace('%s', winner)
-          .removeClass 'hidden'
+        message = $('#alertMessageList .endGame').text()
+        $('#alertMessage').html(
+          $('#alertMessageList .endGame').clone()
+            .text message.replace('%s', winner)
+            .addClass('animated bounceIn')
+        )
 
     restart: (playerWhoRestart, firstToPlay) ->
       @firstToPlay = firstToPlay
       @initGame()
       @updateGameBoard()
       $('#data .turn').removeClass(@oppositeTurn(@turn)).addClass(@turn)
-
-      $('#alertMessage p').addClass 'hidden'
-      $('#alertMessage .restart > span').addClass 'hidden'
+      $('#alertMessageList .restart > span').addClass 'hidden'
 
       if playerWhoRestart == @pseudoOther
-        message = $('#alertMessage .restart .theOtherRestarted').text()
-        $('#alertMessage .restart .theOtherRestarted')
+        message = $('#alertMessageList .restart .theOtherRestarted').text()
+        $('#alertMessageList .restart .theOtherRestarted')
           .text message.replace('%s', @pseudoOther)
           .removeClass 'hidden'
 
@@ -156,20 +179,22 @@ define ['jquery'], ($) ->
         $('#data .turn .pseudo').text @pseudo
         $('.score .black .pseudo').text @pseudo
         $('.score .white .pseudo').text @pseudoOther
-        message = $('#alertMessage .restart .youStart').text()
-        $('#alertMessage .restart .youStart')
-          .text message.replace('%s', @pseudo)
+        message = $('#alertMessageList .restart .youStart').text()
+        $('#alertMessageList .restart .youStart')
           .removeClass 'hidden'
       else
         $('#data .turn .pseudo').text @pseudoOther
         $('.score .black .pseudo').text @pseudoOther
         $('.score .white .pseudo').text @pseudo
-        message = $('#alertMessage .restart .theOtherStarts').text()
-        $('#alertMessage .restart .theOtherStarts')
+        message = $('#alertMessageList .restart .theOtherStarts').text()
+        $('#alertMessageList .restart .theOtherStarts')
           .text message.replace('%s', @pseudoOther)
           .removeClass 'hidden'
 
-      $('#alertMessage .restart').removeClass 'hidden' 
+      $('#alertMessage').html(
+        $('#alertMessageList .restart').clone()
+          .addClass('animated bounceIn')
+      )
 
     oppositeTurn: (turn) ->
       return if turn == 'black' then 'white' else 'black'

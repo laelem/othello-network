@@ -48,7 +48,7 @@
     src: path.join(__dirname, 'assets'),
     dest: path.join(__dirname, 'public'),
     compile: function(str, pathname) {
-      return stylus(str).set('filename', pathname).set('compress', true).use(nib());
+      return stylus(str).set('include css', true).set('filename', pathname).set('compress', true).use(nib());
     }
   }));
 

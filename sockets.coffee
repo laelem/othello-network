@@ -70,8 +70,8 @@ module.exports.start = (io, i18n) ->
 
 
     #Game
-    socket.on 'endTurn', (gameName, game) ->
-      socket.broadcast.to(gameName).emit 'endTurnOther', game
+    socket.on 'endTurn', (gameName, game, lastPiecePlayed) ->
+      socket.broadcast.to(gameName).emit 'endTurnOther', game, lastPiecePlayed
 
     socket.on 'otherCanPlay', (gameName) ->
       socket.broadcast.to(gameName).emit 'myTurn'
