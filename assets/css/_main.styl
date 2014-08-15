@@ -1,10 +1,5 @@
 #main
-  margin-top 40px
   text-align center
-  header
-    border-bottom 1px solid #ddd
-    padding-bottom 20px
-    margin-bottom 40px
   h2
     font-size 14px
     margin 0
@@ -39,12 +34,13 @@
     text-align center
 
 #gameboard
-  [role="row"]
+  cursor pointer
+  .row
     line-height 10px
     &:first-child
       [role="case"]
         border-top 1px solid white
-  [role="case"]
+  .case
     display inline-block
     width 39px
     height 39px
@@ -53,28 +49,87 @@
     border-right 1px solid white
     &:first-child
       border-left 1px solid white
-  [role="piece"]
+  .piece
     display inline-block
     width 29px
     height 29px
     margin 5px auto
     border-radius 15px
-    &[data-color="white"]
+    &.white
       background-color white
       border 1px solid black
-    &[data-color="black"]
+    &.black
       background-color black
       border 1px solid white
 
 #tchat
   text-align left
+  font-size 13px
+  .pseudo
+    font-weight bold
   ul
     border 1px solid darkgrey
-    height 255px
+    height 243px
     overflow-y auto
     padding 10px
   textarea
     width 100%
+    padding 10px
+  .message .pseudo
+    padding-right 5px
 
 #data
   text-align right
+  .score
+    margin-top 40px
+    border-top 1px dashed darkgrey
+    border-bottom 1px dashed darkgrey
+    h4
+      border-bottom 1px dashed darkgrey
+      padding-bottom 5px
+  .pseudo:before
+    content ""
+    display inline-block
+    vertical-align -3px
+    width 15px
+    height 15px
+    margin-right 5px
+    border 1px solid black
+    border-radius 8px
+  .black .pseudo:before
+    background-color black
+  .white .pseudo:before
+    background-color white
+  .turn .pseudo
+    border 1px solid darkgrey
+    border-radius 5px
+    padding 5px
+    background-color lighten(lightgrey, 10)
+  
+#header
+  margin-top 40px
+  margin-bottom 40px
+#headerStart
+  @extends #header
+  border-bottom 1px solid #ddd
+  padding-bottom 20px
+#headerGame
+  @extends #header
+  position relative
+  #alertMessage
+    margin-top 20px
+    min-height 50px
+    background-color darken(white, 10)
+    p
+      margin 0
+      padding 15px
+    .endGameEqual, .endGame
+      font-weight bold
+      text-transform uppercase
+  #actions
+    position absolute
+    top 0
+    right 0
+    a
+      margin-left 10px
+      

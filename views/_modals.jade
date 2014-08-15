@@ -1,0 +1,50 @@
+#modalOtherPlayerQuit.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type="button", data-dismiss="modal")
+          span(aria-hidden="true") &times;
+          span.sr-only= __('global.close')
+        h4.modal-title
+          span.pseudoToReplace= params.pseudoOther
+          = __('modalOtherPlayerQuit.title')
+      .modal-body
+        p
+          span.pseudoToReplace= params.pseudoOther
+          = __('modalOtherPlayerQuit.message')
+        p= __('modalOtherPlayerQuit.gameOver')
+      .modal-footer
+        button.btn.btn-primary.linkBackToHome(type="button")
+          = __('modalOtherPlayerQuit.backToHome')
+
+#modalQuit.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type="button", data-dismiss="modal")
+          span(aria-hidden="true") &times;
+          span.sr-only= __('global.close')
+        h4.modal-title= __('modalQuit.title')
+      .modal-body
+        p= __('modalQuit.message')
+      .modal-footer
+        button.btn.btn-primary.submit(type="button")
+          = __('modalQuit.quit')
+        button.btn.btn-default.cancel(type="button", data-dismiss="modal")
+          = __('modalQuit.cancel')
+
+#modalRestart.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type="button", data-dismiss="modal")
+          span(aria-hidden="true") &times;
+          span.sr-only= __('global.close')
+        h4.modal-title= __('modalRestart.title')
+      .modal-body
+        p= __('modalRestart.message')
+      .modal-footer
+        button.btn.btn-primary.submit(type="button")
+          = __('modalRestart.restart')
+        button.btn.btn-default.cancel(type="button", data-dismiss="modal")
+          = __('modalRestart.cancel')

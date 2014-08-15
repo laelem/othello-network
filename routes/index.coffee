@@ -8,16 +8,10 @@ router.get '/', (req, res) ->
 
 router.post '/play', (req, res) ->
   params = req.body.params
-  params.firstPlayer = (params.firstPlayer == 'true' ? true : false)
-
-  params.youStart = false
-  if ((params.firstPlayer && params.firstToPlay == params.pseudoFirst) || 
-  (params.firstPlayer == false && params.firstToPlay == params.pseudoSecond))
-    params.youStart = true
-  
-  params.gameboard_size = config.default_gameboard_size
-  params.middle1 = params.gameboard_size/2 - 1 
-  params.middle2 = params.gameboard_size/2
+  params.linkRules = config.linkRules
+  params.firstToPlay = params.firstToPlay || '???'
+  params.pseudoOther = params.pseudoOther || '???'
+  params.firstPlayer = if params.firstPlayer == 'true' then true else false
   res.app.render 'index', {'params': params, '__': i18n.__}, (err, html) ->
     res.send({html: html})
 

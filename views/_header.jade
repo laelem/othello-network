@@ -1,0 +1,46 @@
+header#headerGame
+  h1= __('app.name')
+  h2= __('data.gameName') + params.gameName
+
+  section#alertMessage
+    - if (params.firstPlayer)
+      p.waitingAnotherPlayer= __('alertMessage.waitingAnotherPlayer')
+      p.alertAnotherPlayer.hidden.showOnLoad.bg-danger
+        span.pseudoToReplace.pseudo= params.pseudoOther
+        = __('alertMessage.alertAnotherPlayer') + ' '
+        - if (params.firstToPlay == params.pseudo)
+          = __('alertMessage.youStart')
+        - else
+          = __('alertMessage.theOtherStarts.first')
+          span(class="pseudo #{ params.firstPlayer ? 'pseudoToReplace' : '' }")
+            = params.pseudoOther
+          = __('alertMessage.theOtherStarts.second')
+    - else
+      p.alertYouJoin.bg-danger
+        = __('alertMessage.alertYouJoin') + ' '
+        - if (params.firstToPlay == params.pseudo)
+          = __('alertMessage.youStart')
+        - else
+          = __('alertMessage.theOtherStarts.first')
+          span(class="pseudo #{ params.firstPlayer ? 'pseudoToReplace' : '' }")
+            = params.pseudoOther
+          = __('alertMessage.theOtherStarts.second')
+    p.impossiblePlay.hidden.bg-danger= __('alertMessage.impossiblePlay')
+    p.impossiblePlayOther.hidden.bg-danger= __('alertMessage.impossiblePlayOtherPlayer')
+    p.endGameEqual.hidden.bg-danger= __('alertMessage.endGameEqual')
+    p.endGame.hidden.bg-danger= __('alertMessage.endGame')
+    p.restart.hidden.bg-danger
+      span.theOtherRestarted.hidden= __('alertMessage.theOtherRestarted') + ' '
+      span.youStart.hidden= __('alertMessage.youStart')
+      span.theOtherStarts.hidden
+        = __('alertMessage.theOtherStarts.first')
+        = ' %s '
+        = __('alertMessage.theOtherStarts.second')
+
+  section#actions
+    a.rules.btn.btn-success.btn-sm(href="#{ params.linkRules }", target="_blank")
+      = __('actions.showRules')
+    a.restart.btn.btn-warning.btn-sm
+      = __('actions.restart')
+    a.quit.btn.btn-danger.btn-sm(data-toggle="modal", data-target="#modalQuit")
+      = __('actions.quit')

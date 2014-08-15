@@ -1,83 +1,35 @@
-#modalOtherPlayerQuit.modal.fade
-  .modal-dialog
-    .modal-content
-      .modal-header
-        button.close(type="button", data-dismiss="modal")
-          span(aria-hidden="true") &times;
-          span.sr-only= __('global.close')
-        h4.modal-title
-          - if (params.firstPlayer)
-            span.pseudoToReplace= params.pseudoSecond
-          - else
-            span= params.pseudoFirst
-          = __('modalOtherPlayerQuit.title')
-      .modal-body
-        p
-          - if (params.firstPlayer)
-            span.pseudoToReplace= params.pseudoSecond
-          - else
-            span= params.pseudoFirst
-          = __('modalOtherPlayerQuit.message')
-        p= __('modalOtherPlayerQuit.gameOver')
-      .modal-footer
-        button.btn.btn-primary.linkBackToHome(type="button")
-          = __('modalOtherPlayerQuit.backToHome')
 
-header
-  h1= __('app.name')
-  h2= params.gameName
+include ./_modals.jade
+
+include ./_header.jade
+
 .row
   section.col-sm-4#data
-    p
+    p.turn.black
       = __('data.turn')
-      span(class="#{ params.firstPlayer && params.firstToPlay == params.pseudoSecond ? 'pseudoToReplace' : '' }")
+      span.pseudo(class="#{ params.firstPlayer && params.firstToPlay != params.pseudo ? 'pseudoToReplace' : '' }")
         = params.firstToPlay
-    div
+    div.score
       h4= __('data.score')
-      p(class="#{ params.firstToPlay == params.pseudoFirst ? 'black' : 'white' }")
-        span.pseudoFirst= params.pseudoFirst
+      p(class="#{ params.firstToPlay == params.pseudo ? 'black' : 'white' }")
+        span.pseudo= params.pseudo
         = ' : '
-        span 2
-      p(class="#{ params.firstToPlay == params.pseudoFirst ? 'white' : 'black' }")
-        span.pseudoSecond(class="#{ params.firstPlayer ? 'pseudoToReplace' : '' }")
-          = params.pseudoSecond
+        span.number
+      p(class="#{ params.firstToPlay == params.pseudo ? 'white' : 'black' }")
+        span.pseudo(class="#{ params.firstPlayer ? 'pseudoToReplace' : '' }")
+          = params.pseudoOther
         = ' : '
-        span 2
-    .actions
-      a.restart.btn.btn-primary= __('actions.restart')
-      a.quit.btn.btn-primary= __('actions.quit')
+        span.number
 
   section.col-sm-4#gameboard(role='gameboard')
-    - for (i=0 ; i < params.gameboard_size ; ++i)
-      div(role='row')
-        - for (j=0 ; j < params.gameboard_size ; ++j)
-          div(role='case')
-            - if ((i == params.middle1 && j == params.middle1) || (i == params.middle2 && j == params.middle2))
-              span(role='piece', data-color='white')
-            - else if ((i == params.middle1 && j == params.middle2) || (i == params.middle2 && j == params.middle1))
-              span(role='piece', data-color='black')
+    - for (i=0 ; i < params.gameboardSize ; ++i)
+      div.row
+        - for (j=0 ; j < params.gameboardSize ; ++j)
+          div.case
 
   section.col-sm-4#tchat
     ul
-      - if (params.firstPlayer)
-        li.fromGame.waitingAnotherPlayer= __('tchat.fromGame.waitingAnotherPlayer')
-        li.fromGame.alertAnotherPlayer.hidden.showOnLoad
-          span.pseudoToReplace= params.pseudoSecond
-          = __('tchat.fromGame.alertAnotherPlayer')
-      - else
-        li.fromGame.alertYouJoin= __('tchat.fromGame.alertYouJoin')
-
-      - if (params.youStart)
-        li(class="#{ params.firstPlayer ? 'hidden showOnLoad' : '' }").fromGame.youStart
-          = __('tchat.fromGame.youStart')
-      - else
-        li(class="#{ params.firstPlayer ? 'hidden showOnLoad' : '' }").fromGame.theOtherStarts
-          = __('tchat.fromGame.theOtherStarts.first')
-          span(class="#{ params.firstPlayer ? 'pseudoToReplace' : '' }")
-            = params.firstToPlay == params.pseudoFirst ? params.pseudoFirst : params.pseudoSecond
-          = __('tchat.fromGame.theOtherStarts.second')
-
-      li.writing.hidden
+      li.writing.hidden.text-muted
         span.pseudo
         = __('tchat.someoneIsWriting')
 

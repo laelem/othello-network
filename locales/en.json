@@ -14,9 +14,6 @@
 			"uniquePseudo": "Ce pseudo est déjà utilisé sur cette partie."
 		}
 	},
-	"error": {
-		"gameNotFound": "Cette partie n'existe pas ou n'existe plus."
-	},
 	"startPage": {
 		"title": "Bienvenue sur le jeu Othello !",
 		"newGame": {
@@ -37,31 +34,50 @@
 		"pseudo": "Votre pseudo"
 	},
 	"tchat": {
-		"fromGame": {
-			"waitingAnotherPlayer": "En attente d'un second joueur...",
-			"alertAnotherPlayer": " vient de rejoindre la partie !",
-			"alertYouJoin": "Vous venez de rejoindre la partie !",
-			"youStart": "C'est vous qui commencez.",
-			"theOtherStarts": {
-				"first": "C'est à ",
-				"second": " de commencer."
-			}
-		},
 		"insertMessageHere": "Tapez votre message ici...",
 		"someoneIsWriting": " est en train d'écrire un message..."
 	},
 	"data": {
 		"turn": "Tour : ",
-		"score": "Score"
+		"score": "Score",
+		"gameName": "Nom de la partie : "
 	},
 	"actions": {
 		"restart": "Recommencer la partie",
-		"quit": "Quitter la partie"
+		"quit": "Quitter",
+		"showRules": "Lire les règles"
 	},
 	"modalOtherPlayerQuit": {
 		"title": " est parti !",
 		"message": " a quitté la partie ou a été déconnecté.",
 		"gameOver": "La partie est terminée.",
 		"backToHome": "Retour à l'accueil"
+	},
+	"modalQuit": {
+		"title": "Quitter la partie",
+		"message": "Êtes-vous sûr de vouloir quitter la partie ?",
+		"quit": "Quitter",
+		"cancel": "Annuler"
+	},
+	"alertMessage": {
+		"waitingAnotherPlayer": "En attente d'un second joueur...",
+		"alertAnotherPlayer": " vient de rejoindre la partie !",
+		"alertYouJoin": "Vous venez de rejoindre la partie !",
+		"youStart": "C'est vous qui commencez.",
+		"theOtherStarts": {
+			"first": "C'est ",
+			"second": " qui commence."
+		},
+		"impossiblePlay": "Vous ne pouvez jouer aucun coup ! C'est encore à %s de jouer.",
+		"impossiblePlayOtherPlayer": "%s ne peut jouer aucun coup ! C'est encore à vous de jouer.",
+		"endGameEqual": "Égalité !",
+		"endGame": "%s a gagné !",
+		"theOtherRestarted": "%s a recommencé la partie !"
+	},
+	"modalRestart": {
+		"title": "Recommencer la partie",
+		"message": "Voulez-vous recommencer la partie ?",
+		"restart": "Recommencer",
+		"cancel": "Annuler"
 	}
 }

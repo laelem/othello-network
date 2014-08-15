@@ -1,5 +1,5 @@
 (function() {
-  var app, assets, bodyParser, coffee, cookieParser, express, i18n, io, path, routes, server, sockets, socketsManagement;
+  var app, bodyParser, coffee, express, i18n, io, nib, path, routes, server, sockets, socketsManagement, stylus;
 
   express = require('express');
 
@@ -7,17 +7,17 @@
 
   path = require('path');
 
-  cookieParser = require('cookie-parser');
-
   bodyParser = require('body-parser');
 
   sockets = require('socket.io');
 
   i18n = require("i18n");
 
-  assets = require('connect-assets');
-
   coffee = require('coffee-script');
+
+  stylus = require('stylus');
+
+  nib = require('nib');
 
   coffee.register();
 
@@ -35,8 +35,6 @@
 
   app.use(bodyParser.urlencoded());
 
-  app.use(cookieParser());
-
   i18n.configure({
     locales: ['en', 'fr'],
     objectNotation: true,
@@ -45,7 +43,13 @@
 
   app.use(i18n.init);
 
-  app.use(assets());
+  app.use(stylus.middleware({
+    src: path.join(__dirname, 'assets'),
+    dest: path.join(__dirname, 'public'),
+    compile: function(str, pathname) {
+      return stylus(str).set('filename', pathname).set('compress', true).use(nib());
+    }
+  }));
 
   app.use(express.static(path.join(__dirname, 'public')));
 

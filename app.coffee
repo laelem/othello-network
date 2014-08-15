@@ -2,18 +2,17 @@ express = require('express')
 app = express()
 
 path = require('path')
-cookieParser = require('cookie-parser')
 bodyParser = require('body-parser')
 sockets = require('socket.io')
 i18n = require("i18n")
-assets = require('connect-assets')
 coffee = require('coffee-script')
+stylus = require('stylus')
+nib = require('nib')
 
 coffee.register()
 
 routes = require(path.join(__dirname, 'routes', 'index'))
 socketsManagement = require(path.join(__dirname, 'sockets'))
-
 
 app.set 'port', process.env.PORT || 8888
 
@@ -23,7 +22,6 @@ app.set 'view engine', 'jade'
 
 app.use bodyParser.json()
 app.use bodyParser.urlencoded()
-app.use cookieParser()
 
 # i18n
 i18n.configure {
@@ -34,7 +32,15 @@ i18n.configure {
 app.use i18n.init
 
 # Assets
-app.use assets()
+app.use stylus.middleware(
+  src: path.join(__dirname, 'assets')
+  dest: path.join(__dirname, 'public')
+  compile: (str, pathname) ->
+    stylus(str)
+      .set('filename', pathname)
+      .set('compress', true)
+      .use(nib())
+)
 app.use express.static(path.join(__dirname, 'public'))
 
 app.use '/', routes
