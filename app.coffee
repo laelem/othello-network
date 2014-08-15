@@ -25,7 +25,8 @@ app.use bodyParser.urlencoded()
 
 # i18n
 i18n.configure {
-  locales:['en', 'fr'],
+  locales:['fr'],
+  defaultLocale: 'fr',
   objectNotation: true,
   directory: path.join(__dirname, 'locales')
 }
