@@ -84,5 +84,9 @@
 		"message": "Voulez-vous recommencer la partie ?",
 		"restart": "Recommencer",
 		"cancel": "Annuler"
+	},
+	"gameboard": {
+		"title": "gameboard.title",
+		"desc": "gameboard.desc"
 	}
 }

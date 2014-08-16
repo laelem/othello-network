@@ -39,55 +39,47 @@ define ['jquery'], ($) ->
 
     updateGameBoard: ->
       whiteScore = blackScore = 0
-      for i,row of @game
-        for j,frame of row
-          index1 = (parseInt(i, 10) + 1).toString()
-          index2 = (parseInt(j, 10) + 1).toString()
-          elem = $('#gameboard .row:nth-child('+index1+') .case:nth-child('+index2+')')
-          if frame != ''
-            if frame == 'black' then blackScore += 1 else whiteScore += 1
-            elem.html $('<span>', {class: 'piece '+frame})
-          else
-            elem.html('')
+      for y,row of @game
+        for x,frame of row
+          if frame == 'black' then blackScore += 1 
+          else if frame == 'white' then whiteScore += 1
+          $('#gameboard circle[data-position="y'+y+'-x'+x+'"]').attr 'data-color', frame
       @blackScore = blackScore
       @whiteScore = whiteScore
       $('.score .black .number').text blackScore
       $('.score .white .number').text whiteScore
 
     playShot: (elem) ->
-      if @pseudoOther isnt null && @turn == @color && elem.has('.piece').length == 0
-        frame = elem.index()
-        row = elem.parent().index()
-        pieces = @shot(row, frame, @color, false)
-        if pieces.length > 0
-          @game[row][frame] = @color
-          @lastPiecePlayed.row = row
-          @lastPiecePlayed.frame = frame
-          $('#gameboard .case').removeClass 'lastPlayed'
-          elem.addClass 'lastPlayed'
-          for piece in pieces
-            @game[piece.row][piece.frame] = @color
-          @endTurn()
+      if @pseudoOther isnt null && @turn == @color 
+        position = elem.attr('data-position') 
+        if $('#gameboard circle[data-position="'+position+'"]').attr('data-color') == ''
+          y = parseInt(elem.attr('data-y'), 10)
+          x = parseInt(elem.attr('data-x'), 10)
+          pieces = @shot(y, x, @color, false)
+          if pieces.length > 0
+            @game[y][x] = @color
+            @lastPiecePlayed = 'y'+y+'-x'+x
+            @showLastPiecePlayed()
+            for piece in pieces
+              @game[piece.y][piece.x] = @color
+            @endTurn()
 
     showLastPiecePlayed: ->
-      row = (parseInt(@lastPiecePlayed.row, 10) + 1).toString()
-      frame = (parseInt(@lastPiecePlayed.frame, 10) + 1).toString()
-      elem = $('#gameboard .row:nth-child('+row+') .case:nth-child('+frame+')')
-      $('#gameboard .case').removeClass 'lastPlayed'
-      elem.addClass 'lastPlayed'
+      $('#gameboard [data-last-played="true"]').attr('data-last-played', 'false')
+      $('#gameboard rect[data-position="'+@lastPiecePlayed+'"]').attr('data-last-played', 'true')
 
-    shot: (row, frame, color, possibility) ->
+    shot: (y, x, color, possibility) ->
       pieces = []
       for nearCase in @nearCases
         dist = 0
         tmpPieces = []
         loop
           dist++
-          gameCaseRow = @game[row + nearCase.y * dist] || null
-          gameCase = if gameCaseRow then gameCaseRow[frame + nearCase.x * dist] || null else null
+          gameCaseRow = @game[y + nearCase.y * dist] || null
+          gameCase = if gameCaseRow then gameCaseRow[x + nearCase.x * dist] || null else null
           if gameCase && gameCase != ''
             if gameCase != color
-              tmpPieces.push {row: row + nearCase.y * dist, frame: frame + nearCase.x * dist}
+              tmpPieces.push {y: y + nearCase.y * dist, x: x + nearCase.x * dist}
             else
               if tmpPieces.length > 0
                 if possibility then return true
@@ -98,9 +90,9 @@ define ['jquery'], ($) ->
       if possibility then return false else return pieces
 
     hasPossibleShot: (color) ->
-      for row in [0...@gameboardSize]
-        for frame in [0...@gameboardSize]
-          if @game[row][frame] == '' && @shot(row, frame, color, true)
+      for y in [0...@gameboardSize]
+        for x in [0...@gameboardSize]
+          if @game[y][x] == '' && @shot(y, x, color, true)
             return true
       return false
 
@@ -166,6 +158,7 @@ define ['jquery'], ($) ->
       @firstToPlay = firstToPlay
       @initGame()
       @updateGameBoard()
+      $('#gameboard [data-last-played="true"]').attr('data-last-played', 'false')
       $('#data .turn').removeClass(@oppositeTurn(@turn)).addClass(@turn)
       $('#alertMessageList .restart > span').addClass 'hidden'
 

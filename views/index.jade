@@ -22,10 +22,24 @@ include ./_header.jade
         span.number
 
   section.col-sm-4#gameboard(role='gameboard')
-    - for (i=0 ; i < params.gameboardSize ; ++i)
-      div.row
-        - for (j=0 ; j < params.gameboardSize ; ++j)
-          div.case
+    doctype xml
+    doctype svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd"
+    svg(width="#{params.gameboardSize * 40}px", height="#{params.gameboardSize * 40}px", 
+    xml:lang="fr", xmlns="http://www.w3.org/2000/svg", xmlns:xlink="http://www.w3.org/1999/xlink")
+      title= __('gameboard.title')
+      desc= __('gameboard.desc')
+      - for (y=0 ; y < params.gameboardSize ; ++y)
+        - for (x=0 ; x < params.gameboardSize ; ++x)
+          rect(x="#{x * 40}", y="#{y * 40}", width="39", height="39", 
+            data-position="y#{y}-x#{x}", data-y="#{y}", data-x="#{x}")
+          circle(cx="#{x * 40 + 19.5}", cy="#{y * 40 + 19.5}", r="15", 
+            data-position="y#{y}-x#{x}", data-y="#{y}", data-x="#{x}", data-color="")
+
+  //- section.col-sm-4#gameboard(role='gameboard')
+  //-   - for (i=0 ; i < params.gameboardSize ; ++i)
+  //-     div.row
+  //-       - for (j=0 ; j < params.gameboardSize ; ++j)
+  //-         div.case
 
   section.col-sm-4#tchat
     ul

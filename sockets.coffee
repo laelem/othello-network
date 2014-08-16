@@ -21,7 +21,7 @@ module.exports.start = (io, i18n) ->
       else
         length = data.gameList.push p.gameName
         data.gameListPlayers[length - 1] = [p.pseudo]
-        p.firstToPlay = if Math.round(Math.random() * 2) == 0 then p.pseudo else null
+        p.firstToPlay = if Math.random() < 0.5 then p.pseudo else null
         data.firstToPlayList[length - 1] = p.firstToPlay
         p.gameboardSize = data.gameboardSize
         socket.join p.gameName
@@ -84,5 +84,5 @@ module.exports.start = (io, i18n) ->
 
     socket.on 'restart', (gameName, pseudo, pseudoOther) ->
       playerWhoRestart = pseudo
-      firstToPlay = if Math.round(Math.random() * 2) == 0 then pseudo else pseudoOther
+      firstToPlay = if Math.random() < 0.5 then pseudo else pseudoOther
       io.sockets.to(gameName).emit 'restart', playerWhoRestart, firstToPlay

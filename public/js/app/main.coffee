@@ -92,7 +92,7 @@ define ['socket.io', 'jquery', 'cs!app/game'], (io, $, Game) ->
       window.location.href = '/'
 
 
-    $('body').on 'click', '#gameboard .case', (event) ->
+    $('body').on 'click', '#gameboard rect', (event) ->
       action = window.game.playShot $(this)
       if action 
         socket.emit 'endTurn', window.game.gameName, window.game.game, window.game.lastPiecePlayed
