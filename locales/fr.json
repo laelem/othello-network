@@ -24,7 +24,7 @@
 		},
 		"joinGame": {
 			"title": "Rejoindre une partie existante",
-			"noGame": "Il n'y a pas encore de partie"
+			"noGame": "Il n'y a pas de partie avec un joueur en attente."
 		}
 	},
 	"modalJoinGame": {
@@ -86,7 +86,7 @@
 		"cancel": "Annuler"
 	},
 	"gameboard": {
-		"title": "gameboard.title",
-		"desc": "gameboard.desc"
+		"title": "Plateau de jeu",
+		"desc": "Plateau de jeu"
 	}
 }

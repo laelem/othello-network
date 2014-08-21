@@ -23,7 +23,7 @@
 
   routes = require(path.join(__dirname, 'routes', 'index'));
 
-  socketsManagement = require(path.join(__dirname, 'sockets'));
+  socketsManagement = require(path.join(__dirname, 'sockets', 'sockets'));
 
   app.set('port', process.env.PORT || 8888);
 
@@ -44,13 +44,15 @@
 
   app.use(i18n.init);
 
-  app.use(stylus.middleware({
-    src: path.join(__dirname, 'assets'),
-    dest: path.join(__dirname, 'public'),
-    compile: function(str, pathname) {
-      return stylus(str).set('include css', true).set('filename', pathname).set('compress', true).use(nib());
-    }
-  }));
+  if (app.get('env') === 'development') {
+    app.use(stylus.middleware({
+      src: path.join(__dirname, 'assets'),
+      dest: path.join(__dirname, 'public'),
+      compile: function(str, pathname) {
+        return stylus(str).set('include css', true).set('filename', pathname).set('compress', true).use(nib());
+      }
+    }));
+  }
 
   app.use(express.static(path.join(__dirname, 'public')));
 

@@ -1,7 +1,8 @@
-config = require('./config')
+config = require('../config')
 
 data =
   'gameList': []
+  'activeGameList': []
   'gameListPlayers': []
   'firstToPlayList': []
   'gameboardSize': config.defaultGameboardSize
@@ -9,7 +10,7 @@ data =
 module.exports.start = (io, i18n) ->
 
   io.sockets.on 'connection', (socket) ->
-    socket.emit 'init', data.gameList
+    socket.emit 'init', data.activeGameList
 
     socket.on 'submitNewGame', (p) ->
       p.gameName = p.gameName.trim()
@@ -20,6 +21,7 @@ module.exports.start = (io, i18n) ->
         socket.emit 'errorSubmitNewGame', i18n.__('form.error.uniqueGameName')
       else
         length = data.gameList.push p.gameName
+        data.activeGameList.push p.gameName
         data.gameListPlayers[length - 1] = [p.pseudo]
         p.firstToPlay = if Math.random() < 0.5 then p.pseudo else null
         data.firstToPlayList[length - 1] = p.firstToPlay
@@ -38,6 +40,7 @@ module.exports.start = (io, i18n) ->
         socket.emit 'errorSubmitJoinGame', i18n.__('form.error.uniquePseudo')
       else if gameListPlayers.length == 1
         data.gameListPlayers[indexGame].push p.pseudo
+        data.activeGameList.splice(data.activeGameList.indexOf(p.gameName), 1)
         p.pseudoOther = data.gameListPlayers[indexGame][0]
         p.firstToPlay = data.firstToPlayList[indexGame] || p.pseudo
         p.gameboardSize = data.gameboardSize
@@ -49,14 +52,21 @@ module.exports.start = (io, i18n) ->
     socket.on 'disconnect', ->
       rooms = socket.rooms.slice(1)
       for gameName in rooms
-        if data.gameListPlayers[data.gameList.indexOf gameName]
-          stillOnePlayer = data.gameListPlayers[data.gameList.indexOf gameName].length == 2
-          data.firstToPlayList.splice(data.gameList.indexOf(gameName), 1)
-          data.gameListPlayers.splice(data.gameList.indexOf(gameName), 1)
-          data.gameList.splice(data.gameList.indexOf(gameName), 1)
+        indexGame = data.gameList.indexOf gameName
+        if data.gameListPlayers[indexGame]
+          stillOnePlayer = data.gameListPlayers[indexGame].length == 2
+          data.firstToPlayList.splice(indexGame, 1)
+          data.gameListPlayers.splice(indexGame, 1)
+          if (indexActiveGame = data.activeGameList.indexOf(gameName)) != -1
+            data.activeGameList.splice(indexActiveGame, 1)
+          data.gameList.splice(indexGame, 1)
           socket.broadcast.emit 'removeGame', gameName
           if stillOnePlayer
             socket.broadcast.to(gameName).emit 'otherPlayerQuit'
+
+    socket.on 'leaveGame', (gameName) ->
+      socket.leave gameName
+
 
     # Tchat
     socket.on 'tchatMessage', (gameName, message) ->
@@ -70,8 +80,8 @@ module.exports.start = (io, i18n) ->
 
 
     #Game
-    socket.on 'endTurn', (gameName, game, lastPiecePlayed) ->
-      socket.broadcast.to(gameName).emit 'endTurnOther', game, lastPiecePlayed
+    socket.on 'endTurn', (gameName, game, lastPiecePlayed, score) ->
+      socket.broadcast.to(gameName).emit 'endTurnOther', game, lastPiecePlayed, score
 
     socket.on 'otherCanPlay', (gameName) ->
       socket.broadcast.to(gameName).emit 'myTurn'

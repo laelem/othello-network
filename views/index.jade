@@ -7,17 +7,15 @@ include ./_header.jade
   section.col-sm-4#data
     p.turn.black
       = __('data.turn')
-      span.pseudo(class="#{ params.firstPlayer && params.firstToPlay != params.pseudo ? 'pseudoToReplace' : '' }")
-        = params.firstToPlay
+      span.pseudo
     div.score
       h4= __('data.score')
-      p(class="#{ params.firstToPlay == params.pseudo ? 'black' : 'white' }")
-        span.pseudo= params.pseudo
+      p.black
+        span.pseudo
         = ' : '
         span.number
-      p(class="#{ params.firstToPlay == params.pseudo ? 'white' : 'black' }")
-        span.pseudo(class="#{ params.firstPlayer ? 'pseudoToReplace' : '' }")
-          = params.pseudoOther
+      p.white
+        span.pseudo
         = ' : '
         span.number
 
@@ -35,19 +33,9 @@ include ./_header.jade
           circle(cx="#{x * 40 + 19.5}", cy="#{y * 40 + 19.5}", r="15", 
             data-position="y#{y}-x#{x}", data-y="#{y}", data-x="#{x}", data-color="")
 
-  //- section.col-sm-4#gameboard(role='gameboard')
-  //-   - for (i=0 ; i < params.gameboardSize ; ++i)
-  //-     div.row
-  //-       - for (j=0 ; j < params.gameboardSize ; ++j)
-  //-         div.case
-
   section.col-sm-4#tchat
     ul
       li.writing.hidden.text-muted
         span.pseudo
         = __('tchat.someoneIsWriting')
-
-    - if (params.firstPlayer)
-      textarea(data-placeholder="#{__('tchat.insertMessageHere')}", disabled="disabled")
-    - else
-      textarea(placeholder="#{__('tchat.insertMessageHere')}")
+    textarea(data-placeholder="#{__('tchat.insertMessageHere')}", disabled="disabled")

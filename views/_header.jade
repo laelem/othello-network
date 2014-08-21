@@ -12,35 +12,30 @@ header#headerGame
           = __('alertMessage.youStart')
         - else
           = __('alertMessage.theOtherStarts.first')
-          span(class="pseudo #{ params.firstPlayer ? 'pseudoToReplace' : '' }")
-            = params.pseudoOther
+          = params.pseudoOther
           = __('alertMessage.theOtherStarts.second')
     
   section#alertMessageList.hidden
     p.alertAnotherPlayer
-      span.pseudoToReplace.pseudo= params.pseudoOther
+      span.pseudoToReplace= params.pseudoOther
       = __('alertMessage.alertAnotherPlayer') + ' '
       - if (params.firstToPlay == params.pseudo)
         = __('alertMessage.youStart')
       - else
         = __('alertMessage.theOtherStarts.first')
-        span(class="pseudo #{ params.firstPlayer ? 'pseudoToReplace' : '' }")
-          = params.pseudoOther
+        span.pseudoToReplace= params.pseudoOther
         = __('alertMessage.theOtherStarts.second')
     p.yourTurn= __('alertMessage.yourTurn')
     p.theOtherTurn
       i.fa.fa-circle-o-notch.fa-spin
-      span(class="pseudo #{ params.firstPlayer ? 'pseudoToReplace' : '' }")
-        = params.pseudoOther
+      span.pseudo.pseudoToReplace= params.pseudoOther
       = __('alertMessage.theOtherTurn')
     p.impossiblePlay
       = __('alertMessage.impossiblePlay.first')
-      span(class="pseudo #{ params.firstPlayer ? 'pseudoToReplace' : '' }")
-        = params.pseudoOther
+      span.pseudoToReplace= params.pseudoOther
       = __('alertMessage.impossiblePlay.second')
     p.impossiblePlayOther
-      span(class="pseudo #{ params.firstPlayer ? 'pseudoToReplace' : '' }")
-        = params.pseudoOther
+      span.pseudoToReplace= params.pseudoOther
       = __('alertMessage.impossiblePlayOtherPlayer')
     p.endGameEqual= __('alertMessage.endGameEqual')
     p.endGame= __('alertMessage.endGame')
@@ -49,8 +44,7 @@ header#headerGame
       span.youStart.hidden= __('alertMessage.youStart')
       span.theOtherStarts.hidden
         = __('alertMessage.theOtherStarts.first')
-        span(class="pseudo #{ params.firstPlayer ? 'pseudoToReplace' : '' }")
-          = params.pseudoOther
+        span.pseudoToReplace= params.pseudoOther
         = __('alertMessage.theOtherStarts.second')
 
   section#actions
