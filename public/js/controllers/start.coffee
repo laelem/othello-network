@@ -8,8 +8,8 @@ define ['cs!views/start', 'cs!views/tchat', 'cs!models/othello', 'socket.io', 'j
 
     # Init
 
-    socket.on 'init', (gameList) ->
-      startGui.showGameList gameList
+    socket.on 'init', (activeGameList, inactiveGameList) ->
+      startGui.showGameList activeGameList, inactiveGameList
       
 
     # Create new game
@@ -70,6 +70,9 @@ define ['cs!views/start', 'cs!views/tchat', 'cs!models/othello', 'socket.io', 'j
         window.game = new OthelloModel params
         window.game.initGame()
         window.guiTchat = new GuiTchat(window.game.gameName, window.game.pseudo, window.game.pseudoOther)
+
+    socket.on 'fullGame', (gameName) ->
+      startGui.fullGame gameName
 
     socket.on 'removeGame', (gameName) ->
       startGui.removeGame gameName

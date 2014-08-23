@@ -2,24 +2,27 @@ define ['jquery'], ($) ->
   
   class StartGui
 
-    showGameList: (gameList) ->
+    showGameList: (activeGameList, inactiveGameList) ->
       $('#joinGame .loading').remove()
-      if gameList.length > 0
-        for gameName in gameList
-          elem = @getGameElemList(gameName)
-          $('#joinGame ul').append elem
-      else
+      if activeGameList.length > 0
+        for gameName in activeGameList
+          $('#joinGame ul').prepend @getActiveGameElemList(gameName)
+      if inactiveGameList.length > 0
+        for gameName in inactiveGameList
+          $('#joinGame ul').append @getInactiveGameElemList(gameName)
+      if activeGameList.length == 0 && inactiveGameList.length == 0
         $('#joinGame .noGame').removeClass('hidden')
 
-    getGameElemList: (gameName) ->
-      elem = $('<li>')
-      elem.append $('<a>', {
-        class: 'bg-info'
-        href: '#'
-        text: gameName
-        'data-gameName': gameName
-      })
-      return elem
+    getActiveGameElemList: (gameName) ->
+      elem = $('#joinGame li.active.hidden').clone()
+      elem.find('a').attr('data-gameName', gameName).text(gameName)
+      return elem.removeClass('hidden')
+
+    getInactiveGameElemList: (gameName) ->
+      elem = $('#joinGame li.inactive.hidden').clone()
+      elem.find('div').attr('data-gameName', gameName)
+      elem.find('.gameName').text(gameName)
+      return elem.removeClass('hidden')
 
     getParamsNewGame: ->
       return {    
@@ -31,9 +34,9 @@ define ['jquery'], ($) ->
       $('#newGame .error').html(errorMessage).removeClass('hidden')
 
     showNewGame: (gameName) ->
-      if $('#joinGame li').length == 0
+      if $('#joinGame li:visible').length == 0
         $('#joinGame .noGame').addClass('hidden')
-      $('#joinGame ul').append @getGameElemList(gameName)
+      $('#joinGame ul').prepend @getActiveGameElemList(gameName)
 
     showGameTemplate: (gameName, html) ->      
       $(document).prop 'title', $(document).prop('title') + ' >> ' + gameName
@@ -63,9 +66,13 @@ define ['jquery'], ($) ->
       }
 
     removeGame: (gameName) ->
-      $('#joinGame a[data-gameName="' + gameName + '"]').parent('li').remove()
-      if $('#joinGame li').length == 0
+      $('#joinGame [data-gameName="' + gameName + '"]').parent('li').remove()
+      if $('#joinGame li:visible').length == 0
         $('#joinGame .noGame').removeClass('hidden')
+
+    fullGame: (gameName) ->
+      $('#joinGame [data-gameName="' + gameName + '"]').parent('li').remove()
+      $('#joinGame ul').append @getInactiveGameElemList(gameName)
 
     showOtherPlayerArrived: ->
       $('#alertMessage').html(

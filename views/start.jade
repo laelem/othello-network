@@ -48,3 +48,10 @@ block content
         p.loading: i.fa.fa-circle-o-notch.fa-spin
         p.well.noGame.hidden= __('startPage.joinGame.noGame')
         ul.list-unstyled
+          li.active.hidden
+            a.bg-info(href="#", data-gameName="")
+          li.inactive.hidden
+            div.bg-danger(data-gameName="")
+              span.gameName
+              = ' '
+              strong= __('startPage.joinGame.fullGame')

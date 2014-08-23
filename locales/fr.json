@@ -24,7 +24,8 @@
 		},
 		"joinGame": {
 			"title": "Rejoindre une partie existante",
-			"noGame": "Il n'y a pas de partie avec un joueur en attente."
+			"noGame": "Il n'y a pas encore de partie.",
+			"fullGame": "[partie pleine]"
 		}
 	},
 	"modalJoinGame": {
